@@ -3,7 +3,7 @@ class card() :
         self.ID = ID
         self.colour = colour
         self.type = type
-        self.name = str(colour+"_"+type)
+        self.name = str(colour+"_"+str(type))
 
 class player():
     def __init__(self,nickname,hand,addr,conn):
@@ -15,13 +15,21 @@ class player():
 
 class game():
     def __init__(self):
-        discard = []
-        deck = []
-        players = []
+        self.discard = []
+        self.deck = []
+        self.players = []
         pass
     def gendeck(self):
         colours = ["yelllow","blue","green","red"]
-        types = range(0,9)
+        types = [0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9]
         special = ["wild","+4"]
-        
+        IDCount = 0
+        for colour in colours :
+            for num in types :
+                cad = card(IDCount,colour,num)
+                print(cad)
+                self.deck.append(cad)
+                IDCount +=1
+
+
         

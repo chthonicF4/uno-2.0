@@ -1,9 +1,14 @@
-from pydoc import cli
 import threading
 import socket
 import random
 from classes import *
 import pickle
+
+def start(players) :
+    gameState = game()
+    gameState.players = players
+    gameState.gendeck()
+    print(gameState.deck)
 
 def sendMsg(conn,msg) :
     msg  = pickle.dumps(msg)
@@ -27,10 +32,12 @@ def server(HOST,PORT,numPlayer):
             msg = recvMsg(conn)
             newPlayer = player(msg,[],addr,conn)
             players.append(newPlayer)
-            clientHandle(newPlayer)
+            clientThread = threading.Thread(target=clientHandle,args=(newPlayer,))
+            clientThread.start()
             newPlayer = None
             print("connected by",addr)
         print("max players reached")
+        start(players)
         pass
 
 def clientHandle(player) :
