@@ -11,7 +11,11 @@ class player():
         self.hand = hand
         self.addr = addr
         self.conn = conn
-        pass      
+
+    def pickUp(self,deck) :
+        self.hand.append(deck.pop(0))
+
+
 
 class game():
     def __init__(self):
@@ -19,17 +23,28 @@ class game():
         self.deck = []
         self.players = []
         pass
+    
     def gendeck(self):
-        colours = ["yelllow","blue","green","red"]
+        colours = ["yellow","blue","green","red"]
         types = [0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9]
-        special = ["wild","+4"]
+        special = ["wild","wild","+4","+4"]
         IDCount = 0
         for colour in colours :
             for num in types :
                 cad = card(IDCount,colour,num)
-                print(cad)
                 self.deck.append(cad)
                 IDCount +=1
+        for type in special :
+            crd = card(IDCount,"black",type)
+            self.deck.append(crd)
+            IDCount += 1
+     
+    def handOutCards(self) :
+        for player in self.players :
+            for x in range(7) :
+                player.pickUp(self.deck)
+
+
 
 
         

@@ -4,11 +4,13 @@ import random
 from classes import *
 import pickle
 
-def start(players) :
+def setup(players) :
     gameState = game()
     gameState.players = players
     gameState.gendeck()
-    print(gameState.deck)
+    gameState.handOutCards()
+    gameState.discard.append(gameState.deck.pop(0))
+    return gameState
 
 def sendMsg(conn,msg) :
     msg  = pickle.dumps(msg)
@@ -37,8 +39,12 @@ def server(HOST,PORT,numPlayer):
             newPlayer = None
             print("connected by",addr)
         print("max players reached")
-        start(players)
-        pass
+        #----- start ------
+
+        game = setup(players)
+
+
+        
 
 def clientHandle(player) :
     print("handle started for",player.nick)
