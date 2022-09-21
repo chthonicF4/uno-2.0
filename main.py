@@ -3,6 +3,7 @@ import socket
 import random
 from classes import *
 import pickle
+import time
 
 def setup(players) :
     gameState = game()
@@ -40,14 +41,33 @@ def server(HOST,PORT,numPlayer):
             print("connected by",addr)
         print("max players reached")
         #----- start ------
-
-        game = setup(players)
+        global gameVar
+        gameVar = setup(players)
+        gameVar.show()
+        time.sleep(3)
+        print("shuffling")
+        gameVar.shuffle()
+        
 
 
         
 
 def clientHandle(player) :
+    global gameVar
     print("handle started for",player.nick)
+    while True :
+        r = True
+        try:
+            coppy = gameVar
+        except:
+            r = False
+        if r == True :
+            break
+    while True :
+        while coppy == gameVar :
+            pass
+        print("updating")
+
     pass
 
 def client(HOST="127.0.0.1",PORT=None):

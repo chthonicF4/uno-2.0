@@ -1,9 +1,12 @@
+import random
+
 class card() :
     def __init__(self,ID,colour,type):
         self.ID = ID
         self.colour = colour
         self.type = type
         self.name = str(colour+"_"+str(type))
+        self.dispName = (f"[ID : {self.ID} , {self.name} ]")
 
 class player():
     def __init__(self,nickname,hand,addr,conn):
@@ -24,6 +27,9 @@ class game():
         self.players = []
         pass
     
+    def shuffle(self):
+        random.shuffle(self.deck)
+
     def gendeck(self):
         colours = ["yellow","blue","green","red"]
         types = [0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9]
@@ -38,12 +44,25 @@ class game():
             crd = card(IDCount,"black",type)
             self.deck.append(crd)
             IDCount += 1
+        self.shuffle() 
      
     def handOutCards(self) :
         for player in self.players :
             for x in range(7) :
                 player.pickUp(self.deck)
-
+    
+    def show(self):
+        print("\n------------- GAME STATE-------------------\n\nPLAYERS :\n")
+        for index,player in enumerate(self.players) :
+            print(f"\n/------------- Players {index} -------------/\n")
+            print(f"Name : {player.nick} , addr : {player.addr}\n\n hand :\n")
+            for index,card in enumerate(player.hand) :
+                print(f"{index}:{card.dispName} , ",end="")
+        print("------------------- Discard Pile ------------------------")
+        for index,card in enumerate(self.discard) :
+            print(f"{index}:{card.dispName} , ",end="")
+        print("\n---------------------------------------------------------")
+            
 
 
 
