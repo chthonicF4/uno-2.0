@@ -21,7 +21,10 @@ def sendMsg(conn,msg) :
 def recvMsg(conn) :
     msg = conn.recv(1024)
     if msg != None :
-        return pickle.loads(msg) 
+        try :
+            return pickle.loads(msg) 
+        except :
+            print("load error")
     else :
         return
 
@@ -47,6 +50,17 @@ def server(HOST,PORT,numPlayer):
         time.sleep(3)
         print("shuffling")
         gameVar.shuffle()
+        while True :
+            time.sleep(0.2)
+            update(gameVar)
+
+
+def update(gameVar) :
+    for index,player in enumerate(gameVar.players) :
+        # 1 : turn ,2 : hand ,3 : list of hand sizes ,4: discard pile top card ,5 : player index
+        msg = [gameVar.turn,player.hand,gameVar.playerHands(),gameVar.discard[0],index]
+        sendMsg(player.conn,msg)
+        pass
         
 
 
@@ -75,6 +89,13 @@ def client(HOST="127.0.0.1",PORT=None):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((HOST,PORT))
         sendMsg(s,nickname)
+    # ------ main loop ------
+        while True :
+            msg = recvMsg(s)
+            if msg != None :
+                print(msg)
+            pass
+
     pass
 
 def host() :

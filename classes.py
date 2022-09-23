@@ -25,10 +25,17 @@ class game():
         self.discard = []
         self.deck = []
         self.players = []
+        self.turn = 0
         pass
     
     def shuffle(self):
         random.shuffle(self.deck)
+
+    def playerHands(self) :
+        out = []
+        for player in self.players :
+            out.append(len(player.hand))
+        return out
 
     def gendeck(self):
         colours = ["yellow","blue","green","red"]
