@@ -3,7 +3,8 @@ import socket
 import random
 from classes import *
 import pickle
-import time
+global sndr
+sndr = sender()
 
 def setup(players) :
     gameState = game()
@@ -14,8 +15,7 @@ def setup(players) :
     return gameState
 
 def sendMsg(conn,msg) :
-    msg  = pickle.dumps(msg)
-    conn.sendall(msg)
+    sndr.sendMsg(conn,msg)
     return
 
 def recvMsg(conn) :
@@ -47,18 +47,16 @@ def server(HOST,PORT,numPlayer):
         global gameVar
         gameVar = setup(players)
         gameVar.show()
-        time.sleep(3)
-        print("shuffling")
-        gameVar.shuffle()
-        while True :
-            time.sleep(0.2)
-            update(gameVar)
+        print("updating")
+        update(gameVar)
 
 
 def update(gameVar) :
     for index,player in enumerate(gameVar.players) :
         # 1 : turn ,2 : hand ,3 : list of hand sizes ,4: discard pile top card ,5 : player index
+        print(f"constructing msg for {index}") 
         msg = [gameVar.turn,player.hand,gameVar.playerHands(),gameVar.discard[0],index]
+        print("sending message")
         sendMsg(player.conn,msg)
         pass
         

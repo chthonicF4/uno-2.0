@@ -1,4 +1,10 @@
+from concurrent.futures import thread
+import queue
 import random
+import threading
+import pickle
+import socket
+import time
 
 class card() :
     def __init__(self,ID,colour,type):
@@ -17,6 +23,26 @@ class player():
 
     def pickUp(self,deck) :
         self.hand.append(deck.pop(0))
+
+class sender() :
+    def __init__(self):
+        self.queue = []
+        self.thread = threading.Thread(target=self.sender,args=())
+        self.thread.start()
+        pass
+    def sender(self) :
+        while True :
+            if len(self.queue) > 0 :
+                data = self.queue.pop()
+                conn = data[0]
+                msg = pickle.dumps(data[1])
+                conn.sendall(msg)
+                time.sleep(0.05)
+            else:
+                pass
+    def sendMsg(self,conn,msg) :
+        self.queue.append((conn,msg))
+
 
 
 
